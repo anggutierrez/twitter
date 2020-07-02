@@ -7,9 +7,14 @@
 //
 
 #import "TimelineViewController.h"
+#import "Tweet.h"
+#import "TweetCell.h"
 #import "APIManager.h"
 
-@interface TimelineViewController ()
+@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *tweets;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -17,25 +22,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Get timeline
-    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
-        if (tweets) {
-            NSLog(@"😎😎😎 Successfully loaded home timeline");
-            for (NSDictionary *dictionary in tweets) {
-                NSString *text = dictionary[@"text"];
-                NSLog(@"%@", text);
-            }
-        } else {
-            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
-        }
-    }];
+	
+	self.tableView.dataSource = self;
+	self.tableView.delegate = self;
+	
+	self.refreshControl = [[UIRefreshControl alloc] init];
+	[self.refreshControl addTarget:self action:@selector(fetchTweets) forControlEvents:UIControlEventValueChanged];
+	[self.tableView insertSubview:self.refreshControl atIndex:0];
+	
+	[self fetchTweets];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)fetchTweets {
+    [[APIManager shared] getHomeTimelineWithCompletion:^(NSArray *tweets, NSError *error) {
+        if (tweets) {
+            NSLog(@"😎😎😎 Successfully loaded home timeline");
+			
+			self.tweets = (NSMutableArray *) tweets;
+			
+			// Array of objs now, so we access through the "." operator
+			for (Tweet *tweet in tweets) {
+				NSString *text = tweet.text;
+                NSLog(@"%@", text);
+            }
+			
+			[self.tableView reloadData];
+			
+        } else {
+            NSLog(@"😫😫😫 Error getting home timeline: %@", error.localizedDescription);
+        }
+		[self.refreshControl endRefreshing];
+    }];
+	
+}
+
+
 
 /*
 #pragma mark - Navigation
@@ -47,5 +73,22 @@
 }
 */
 
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+	TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
+
+	
+	Tweet *tweet = self.tweets[indexPath.row];
+	
+	cell.nameLabel.text = tweet.user.name;
+	cell.handleLabel.text = tweet.user.screenName;
+	cell.tweetView.text = tweet.text;
+	
+	return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	return self.tweets.count;
+}
 
 @end
