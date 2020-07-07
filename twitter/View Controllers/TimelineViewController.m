@@ -7,13 +7,14 @@
 //
 
 #import "TimelineViewController.h"
-#import "ComposeViewController.h"
-#import "tweetDetailsViewController.h"
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+#import "ComposeViewController.h"
+#import "tweetDetailsViewController.h"
 #import "Tweet.h"
 #import "TweetCell.h"
 #import "APIManager.h"
+#import "NSDate+DateTools.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -66,22 +67,19 @@
     }];
 }
 
-// Logout button calls the logout function
-- (IBAction)logoutButtonTapped:(id)sender {
-	[self logoutTapped];
-}
 
-- (void) logoutTapped {
+- (IBAction)logoutButtonTapped:(id)sender {
+	NSLog(@"Logout getting called.");
 	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 		
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+	
 	LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+	
 	appDelegate.window.rootViewController = loginViewController;
 	
 	[[APIManager shared] logout];
 }
-
-
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	
@@ -125,14 +123,11 @@
 	cell.tweetView.text = tweet.text;
 	cell.dateLabel.text = tweet.createdAtString.capitalizedString;
 	
-	if (cell.tweet.favorited) {
-		[cell.likeButton.imageView setImage:[UIImage imageNamed:@"favor-icon-red"]];
-	}
+	NSDate *timeAgoDate = [NSDate dateWithTimeIntervalSinceNow:-tweet.createdAtString.intValue];
+	cell.timeLabel.text = [NSString stringWithFormat:@"%@", timeAgoDate.shortTimeAgoSinceNow];
+	
 	[cell.likeButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.favoriteCount] forState:UIControlStateNormal];
 	
-	if (cell.tweet.retweeted) {
-		[cell.retweetButton.imageView setImage:[UIImage imageNamed:@"retweet-icon-green"]];
-	}
 	[cell.retweetButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.retweetCount] forState:UIControlStateNormal];
 	
 //	cell.profileImageView.image = tweet.user.profileImage;
