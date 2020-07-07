@@ -1,8 +1,8 @@
 //
-//  TweetCell.h
+//  tweetDetailsViewController.h
 //  twitter
 //
-//  Created by Angel Gutierrez on 7/2/20.
+//  Created by Angel Gutierrez on 7/6/20.
 //  Copyright © 2020 Emerson Malca. All rights reserved.
 //
 
@@ -11,17 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TweetCell : UITableViewCell
+@interface tweetDetailsViewController : UIViewController
 @property (nonatomic, strong) Tweet *tweet;
+
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *handleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *tweetView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UIButton *likeButton;
-@property (weak, nonatomic) IBOutlet UIButton *retweetButton;
-
-
 
 @end
 

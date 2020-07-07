@@ -8,6 +8,9 @@
 
 #import "TimelineViewController.h"
 #import "ComposeViewController.h"
+#import "tweetDetailsViewController.h"
+#import "AppDelegate.h"
+#import "LoginViewController.h"
 #import "Tweet.h"
 #import "TweetCell.h"
 #import "APIManager.h"
@@ -61,16 +64,49 @@
         }
 		[self.refreshControl endRefreshing];
     }];
+}
+
+// Logout button calls the logout function
+- (IBAction)logoutButtonTapped:(id)sender {
+	[self logoutTapped];
+}
+
+- (void) logoutTapped {
+	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+		
+	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+	LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+	appDelegate.window.rootViewController = loginViewController;
 	
+	[[APIManager shared] logout];
 }
 
 
 
-
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    UINavigationController *navigationController = [segue destinationViewController];
-    ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
-    composeController.delegate = self;
+	
+	if ([segue.identifier isEqual:@"detailsView"]) {
+		// Then pass some data here
+		// Grab the tweet you're trying to pass
+		// Pass it to the destinatation view controller
+		UITableViewCell *tappedCell = sender;
+		NSIndexPath *indexPath = [self.tableView indexPathForCell:tappedCell];
+		Tweet *tweet = self.tweets[indexPath.row];
+		
+		tweetDetailsViewController *tweetViewController = [segue destinationViewController];
+		tweetViewController.tweet = tweet;
+	}
+	else if ([segue.identifier isEqual:@"composeView"]) {
+		// Other data or whatever you wanna do here
+		UINavigationController *navigationController = [segue destinationViewController];
+		ComposeViewController *composeController = (ComposeViewController*)navigationController.topViewController;
+		composeController.delegate = self;
+	}
+}
+
+- (void) didTweet:(Tweet *)tweet {
+	[self.tweets insertObject:tweet atIndex:0];
+	[self.tableView reloadData];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -79,10 +115,27 @@
 	
 	Tweet *tweet = self.tweets[indexPath.row];
 	
-	cell.nameLabel.text = tweet.user.name;
-	cell.handleLabel.text = tweet.user.screenName;
-	cell.tweetView.text = tweet.text;
+	cell.tweet = tweet;
 	
+	NSString *handle = cell.tweet.user.screenName;
+	NSString *fullHandle = [@"@" stringByAppendingString:handle];
+	cell.handleLabel.text = fullHandle;
+	cell.nameLabel.text = tweet.user.name;
+	
+	cell.tweetView.text = tweet.text;
+	cell.dateLabel.text = tweet.createdAtString.capitalizedString;
+	
+	if (cell.tweet.favorited) {
+		[cell.likeButton.imageView setImage:[UIImage imageNamed:@"favor-icon-red"]];
+	}
+	[cell.likeButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.favoriteCount] forState:UIControlStateNormal];
+	
+	if (cell.tweet.retweeted) {
+		[cell.retweetButton.imageView setImage:[UIImage imageNamed:@"retweet-icon-green"]];
+	}
+	[cell.retweetButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.retweetCount] forState:UIControlStateNormal];
+	
+//	cell.profileImageView.image = tweet.user.profileImage;
 	return cell;
 }
 

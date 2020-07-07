@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		ACDB491D24AE3A4400FE591A /* Tweet.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDB491C24AE3A4400FE591A /* Tweet.m */; };
 		ACDB492024AE6D6600FE591A /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDB491F24AE6D6600FE591A /* TweetCell.m */; };
 		ACDB492324AE9D6400FE591A /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDB492224AE9D6400FE591A /* ComposeViewController.m */; };
+		ACDB492624B3E03700FE591A /* tweetDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACDB492524B3E03700FE591A /* tweetDetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,8 @@
 		ACDB491F24AE6D6600FE591A /* TweetCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TweetCell.m; sourceTree = "<group>"; };
 		ACDB492124AE9D6400FE591A /* ComposeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
 		ACDB492224AE9D6400FE591A /* ComposeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
+		ACDB492424B3E03700FE591A /* tweetDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tweetDetailsViewController.h; sourceTree = "<group>"; };
+		ACDB492524B3E03700FE591A /* tweetDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = tweetDetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +152,8 @@
 				6AD2790820BCC04D0085BC29 /* TimelineViewController.m */,
 				ACDB492124AE9D6400FE591A /* ComposeViewController.h */,
 				ACDB492224AE9D6400FE591A /* ComposeViewController.m */,
+				ACDB492424B3E03700FE591A /* tweetDetailsViewController.h */,
+				ACDB492524B3E03700FE591A /* tweetDetailsViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -173,6 +178,7 @@
 				6AD278D120BC4B950085BC29 /* Sources */,
 				6AD278D220BC4B950085BC29 /* Frameworks */,
 				6AD278D320BC4B950085BC29 /* Resources */,
+				EF20B402593C4AA50E3BBDA9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -247,6 +253,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		EF20B402593C4AA50E3BBDA9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-twitter/Pods-twitter-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-twitter/Pods-twitter-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-twitter/Pods-twitter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -256,6 +279,7 @@
 			files = (
 				ACDB492024AE6D6600FE591A /* TweetCell.m in Sources */,
 				6AD278F320BCA6020085BC29 /* BDBOAuth1SessionManager+SFAuthenticationSession.m in Sources */,
+				ACDB492624B3E03700FE591A /* tweetDetailsViewController.m in Sources */,
 				ACDB491A24AE386D00FE591A /* User.m in Sources */,
 				ACDB492324AE9D6400FE591A /* ComposeViewController.m in Sources */,
 				6AD278E820BC4B970085BC29 /* main.m in Sources */,
