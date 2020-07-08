@@ -29,7 +29,7 @@
 		self.retweetButton.selected = YES;
 	}
 	
-	self.nameLabel.text = self.tweet.user.screenName;
+	self.nameLabel.text = self.tweet.user.name;
 	
 	NSString *handle = self.tweet.user.screenName;
 	NSString *fullHandle = [@"@" stringByAppendingString:handle];

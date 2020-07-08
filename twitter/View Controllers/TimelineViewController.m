@@ -15,6 +15,7 @@
 #import "TweetCell.h"
 #import "APIManager.h"
 #import "NSDate+TimeAgo.h"
+#import "DateTools.h"
 #import "UIImageView+AFNetworking.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
@@ -129,16 +130,7 @@
 	
 	cell.tweetView.text = tweet.text;
 	
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
-//	formatter.dateStyle = NSDateFormatterShortStyle;
-//	formatter.timeStyle = NSDateFormatterNoStyle;
-	
-	NSString *createdAt = tweet.createdAtString;
-	NSDate *date = [formatter dateFromString:createdAt];
-	
-	NSString *ago = [date timeAgo];
-	cell.timeLabel.text = ago;
+	cell.timeLabel.text = tweet.createdAtString;
 	
 	NSURL *profileImageURL = [NSURL URLWithString:cell.tweet.user.profilePicture];
 	[cell.profileImageView setImageWithURL:profileImageURL];
