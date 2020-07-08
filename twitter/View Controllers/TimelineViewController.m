@@ -14,7 +14,8 @@
 #import "Tweet.h"
 #import "TweetCell.h"
 #import "APIManager.h"
-#import "NSDate+DateTools.h"
+#import "NSDate+TimeAgo.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface TimelineViewController () <ComposeViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -109,11 +110,17 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
 	TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"TweetCell" forIndexPath:indexPath];
-
-	
 	Tweet *tweet = self.tweets[indexPath.row];
 	
 	cell.tweet = tweet;
+	
+	if (cell.tweet.favorited) {
+		cell.likeButton.selected = YES;
+	}
+	
+	if (cell.tweet.retweeted) {
+		cell.retweetButton.selected = YES;
+	}
 	
 	NSString *handle = cell.tweet.user.screenName;
 	NSString *fullHandle = [@"@" stringByAppendingString:handle];
@@ -121,16 +128,26 @@
 	cell.nameLabel.text = tweet.user.name;
 	
 	cell.tweetView.text = tweet.text;
-	cell.dateLabel.text = tweet.createdAtString.capitalizedString;
 	
-	NSDate *timeAgoDate = [NSDate dateWithTimeIntervalSinceNow:-tweet.createdAtString.intValue];
-	cell.timeLabel.text = [NSString stringWithFormat:@"%@", timeAgoDate.shortTimeAgoSinceNow];
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+//	formatter.dateStyle = NSDateFormatterShortStyle;
+//	formatter.timeStyle = NSDateFormatterNoStyle;
+	
+	NSString *createdAt = tweet.createdAtString;
+	NSDate *date = [formatter dateFromString:createdAt];
+	
+	NSString *ago = [date timeAgo];
+	cell.timeLabel.text = ago;
+	
+	NSURL *profileImageURL = [NSURL URLWithString:cell.tweet.user.profilePicture];
+	[cell.profileImageView setImageWithURL:profileImageURL];
+	
 	
 	[cell.likeButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.favoriteCount] forState:UIControlStateNormal];
 	
 	[cell.retweetButton setTitle:[NSString stringWithFormat:@"%i", cell.tweet.retweetCount] forState:UIControlStateNormal];
 	
-//	cell.profileImageView.image = tweet.user.profileImage;
 	return cell;
 }
 

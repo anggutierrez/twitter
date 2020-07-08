@@ -9,6 +9,7 @@
 #import "TweetCell.h"
 #import "Tweet.h"
 #import "APIManager.h"
+#import "NSDate+TimeAgo.h"
 #import "UIImageView+AFNetworking.h"
 
 @implementation TweetCell
@@ -26,17 +27,24 @@
 
 - (void) refreshTweets {
 	self.nameLabel.text = self.tweet.user.name;
-	self.dateLabel.text = self.tweet.createdAtString;
 	self.tweetView.text = self.tweet.text;
 	
 	NSString *handle = self.tweet.user.screenName;
 	NSString *fullHandle = [@"@" stringByAppendingString:handle];
 	self.handleLabel.text = fullHandle;
 	
-	/*
-	NSURL *profileImageURL = [NSURL URLWithString:self.tweet.user.profileImage];
+	NSString *createdAt = self.tweet.createdAtString;
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
+	NSDate *date = [formatter dateFromString:createdAt];
+	formatter.dateStyle = NSDateFormatterShortStyle;
+	formatter.timeStyle = NSDateFormatterNoStyle;
+	
+	NSString *ago = [date timeAgo];
+	self.timeLabel.text = ago;
+	
+	NSURL *profileImageURL = [NSURL URLWithString:self.tweet.user.profilePicture];
 	[self.profileImageView setImageWithURL:profileImageURL];
-	*/
 	
 	[self.likeButton setTitle:[NSString stringWithFormat:@"%i", self.tweet.favoriteCount] forState:UIControlStateNormal];
 	
@@ -69,9 +77,9 @@
 		
 		[[APIManager shared] unfavorite:self.tweet completion:^(Tweet *tweet, NSError *error) {
 			if (error) {
-				 NSLog(@"Error favoriting tweet: %@", error.localizedDescription);
+				 NSLog(@"Error unfavoriting tweet: %@", error.localizedDescription);
 			} else {
-				NSLog(@"Successfully favorited the following Tweet: %@", tweet.text);
+				NSLog(@"Successfully unfavorited the following Tweet: %@", tweet.text);
 			}
 		}];
 	}
@@ -102,9 +110,9 @@
 		
 		[[APIManager shared] unretweet:self.tweet completion:^(Tweet *tweet, NSError *error) {
 			if (error) {
-				 NSLog(@"Error retweeting tweet: %@", error.localizedDescription);
+				 NSLog(@"Error unretweeting tweet: %@", error.localizedDescription);
 			} else {
-				NSLog(@"Successfully retweeted the following Tweet: %@", tweet.text);
+				NSLog(@"Successfully unretweeted the following Tweet: %@", tweet.text);
 			}
 		}];
 	}
