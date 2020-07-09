@@ -33,15 +33,8 @@
 	NSString *fullHandle = [@"@" stringByAppendingString:handle];
 	self.handleLabel.text = fullHandle;
 	
-	NSString *createdAt = self.tweet.createdAtString;
-	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-	formatter.dateFormat = @"E MMM d HH:mm:ss Z y";
-	NSDate *date = [formatter dateFromString:createdAt];
-	formatter.dateStyle = NSDateFormatterShortStyle;
-	formatter.timeStyle = NSDateFormatterNoStyle;
-	
-	NSString *ago = [date timeAgo];
-	self.timeLabel.text = ago;
+
+	self.timeLabel.text = self.tweet.createdAtString;
 	
 	NSURL *profileImageURL = [NSURL URLWithString:self.tweet.user.profilePicture];
 	[self.profileImageView setImageWithURL:profileImageURL];
