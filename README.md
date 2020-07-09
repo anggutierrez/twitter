@@ -17,7 +17,7 @@ The following **required** functionality is completed:
 - [x] User can tap the retweet and favorite buttons in a tweet cell to retweet and/or favorite a tweet.
 - [x] User can compose a new tweet by tapping on a compose button.
 - [x] Using AutoLayout, the Tweet cell should adjust its layout for iPhone 11, Pro and SE device sizes as well as accommodate device rotation.
-- [ ] User should display the relative timestamp for each tweet "8m", "7h"
+- [x] User should display the relative timestamp for each tweet "8m", "7h"
 - [x] Tweet Details Page: User can tap on a tweet to view it, with controls to retweet, favorite, and reply.
 
 The following **stretch** features are implemented:
@@ -53,7 +53,9 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/HiJ84Ko.gif' title='Login/Logout' width='' alt='Login/Logout' />
+<img src='https://i.imgur.com/0pZtzJJ.gif' title='Basic Functionality' width='' alt='Basic Functionality' />
+<img src='https://i.imgur.com/eRex2k8.gif' title='Compose and Auto-layout' width='' alt='Compose and Auto Layout' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
